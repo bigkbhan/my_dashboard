@@ -103,7 +103,7 @@ function extractKOSPI200Data(html: string) {
     // 실제 HTML 구조에 맞게 수정
     
     // 1. 지수 값 추출 (430.37) - 테이블에서 KOSPI200 다음의 strong 태그
-    const indexValueMatch = html.match(/KOSPI200.*?<strong[^>]*>([0-9,]+\.?[0-9]*)<\/strong>/s);
+    const indexValueMatch = html.match(/KOSPI200[\s\S]*?<strong[^>]*>([0-9,]+\.?[0-9]*)<\/strong>/);
     let indexValue = 0;
     if (indexValueMatch) {
       indexValue = parseFloat(indexValueMatch[1].replace(/,/g, '')) || 0;
@@ -262,16 +262,16 @@ async function fetchIndexFromNaver(indexCode: string, indexName: string) {
       console.log(`${indexName} HTML 샘플 (KOSPI200 포함 부분):`, html.substring(html.indexOf('KOSPI200') - 200, html.indexOf('KOSPI200') + 800));
       
       // KOSPI200 관련 HTML 요소들 찾기
-      const nowValueMatch = html.match(/<td id="now_value"[^>]*>.*?<\/td>/s);
-      const changeValueMatch = html.match(/<td id="change_value"[^>]*>.*?<\/td>/s);
-      const changeRateMatch = html.match(/<td id="change_rate"[^>]*>.*?<\/td>/s);
+      const nowValueMatch = html.match(/<td id="now_value"[^>]*>[\s\S]*?<\/td>/);
+      const changeValueMatch = html.match(/<td id="change_value"[^>]*>[\s\S]*?<\/td>/);
+      const changeRateMatch = html.match(/<td id="change_rate"[^>]*>[\s\S]*?<\/td>/);
       
       console.log(`${indexName} now_value HTML:`, nowValueMatch ? nowValueMatch[0] : '없음');
       console.log(`${indexName} change_value HTML:`, changeValueMatch ? changeValueMatch[0] : '없음');
       console.log(`${indexName} change_rate HTML:`, changeRateMatch ? changeRateMatch[0] : '없음');
     } else {
       // HTML에서 change_value_and_rate 부분 찾기
-      const changeValueMatch = html.match(/<span id="change_value_and_rate"[^>]*>.*?<\/span>/s);
+      const changeValueMatch = html.match(/<span id="change_value_and_rate"[^>]*>[\s\S]*?<\/span>/);
       if (changeValueMatch) {
         console.log(`${indexName} change_value_and_rate HTML:`, changeValueMatch[0]);
       } else {
@@ -302,7 +302,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
     console.log(`${tickerName} (${tickerCode}) 데이터 추출 시작...`);
     
     // HTML을 <div id="rate_info_krx"><div class="today">의 innerHTML로 먼저 추출
-    const todayMatch = html.match(/<div id="rate_info_krx"[^>]*>.*?<div class="today"[^>]*>(.*?)<\/div>.*?<\/div>/s);
+    const todayMatch = html.match(/<div id="rate_info_krx"[^>]*>[\s\S]*?<div class="today"[^>]*>([\s\S]*?)<\/div>[\s\S]*?<\/div>/);
     if (todayMatch) {
       html = todayMatch[1]; // HTML을 today div의 innerHTML로 변경
       console.log(`${tickerName} today innerHTML 추출 완료`);
@@ -311,7 +311,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
     }
     
     // 1. 현재주가 추출 - 더 간단한 패턴 사용
-    const priceMatch = html.match(/<p class="no_today"[^>]*>.*?<em[^>]*>(.*?)<\/em>.*?<\/p>/s);
+    const priceMatch = html.match(/<p class="no_today"[^>]*>[\s\S]*?<em[^>]*>([\s\S]*?)<\/em>[\s\S]*?<\/p>/);
     let currentPrice = 0;
     if (priceMatch) {
       const emContent = priceMatch[1];
@@ -322,7 +322,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
     }
     
         // 2. 등락폭과 트렌드 추출
-    const changeMatch = html.match(/<p class="no_exday"[^>]*>.*?<span class="sptxt sp_txt1"[^>]*>.*?<em[^>]*>(.*?)<\/em>.*?<\/p>/s);
+    const changeMatch = html.match(/<p class="no_exday"[^>]*>[\s\S]*?<span class="sptxt sp_txt1"[^>]*>[\s\S]*?<em[^>]*>([\s\S]*?)<\/em>[\s\S]*?<\/p>/);
     console.log(`${tickerName} changeMatch 결과:`, changeMatch);
     
     let change = 0;
@@ -332,7 +332,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
     console.log(`${tickerName} === TREND 추출 디버깅 시작 ===`);
     
     // no_exday 클래스 내에서 ico 클래스 찾기
-    const noExdayMatch = html.match(/<p class="no_exday"[^>]*>(.*?)<\/p>/s);
+    const noExdayMatch = html.match(/<p class="no_exday"[^>]*>([\s\S]*?)<\/p>/);
     console.log(`${tickerName} noExdayMatch 결과:`, noExdayMatch);
     
     if (noExdayMatch) {
@@ -399,7 +399,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
       console.log(`${tickerName} 등락률 (dd 패턴):`, changePercent);
     } else {
       // 기존 복잡한 패턴도 시도
-      changeRateMatch = html.match(/<div id="rate_info_krx"[^>]*>.*?<div class="today"[^>]*>.*?<p[^>]*>.*?<\/p>.*?<p[^>]*>.*?<em[^>]*>.*?<\/em>.*?<em[^>]*>.*?<span[^>]*>([^<]*)<\/span>.*?<\/em>.*?<\/p>.*?<\/div>.*?<\/div>/s);
+      changeRateMatch = html.match(/<div id="rate_info_krx"[^>]*>[\s\S]*?<div class="today"[^>]*>[\s\S]*?<p[^>]*>[\s\S]*?<\/p>[\s\S]*?<p[^>]*>[\s\S]*?<em[^>]*>[\s\S]*?<\/em>[\s\S]*?<em[^>]*>[\s\S]*?<span[^>]*>([^<]*)<\/span>[\s\S]*?<\/em>[\s\S]*?<\/p>[\s\S]*?<\/div>[\s\S]*?<\/div>/);
       console.log(`${tickerName} changeRateMatch (복잡한 패턴) 결과:`, changeRateMatch);
       
       if (changeRateMatch) {
