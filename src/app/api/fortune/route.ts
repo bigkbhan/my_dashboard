@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 interface FortuneData {
   date: string;
@@ -202,7 +202,7 @@ async function fetchFortuneData(): Promise<FortuneData> {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const data = await fetchFortuneData();
     return NextResponse.json(data);

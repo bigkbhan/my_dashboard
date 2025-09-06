@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getCryptoTickers } from '@/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('🚀 CoinMarketCap API로 암호화폐 정보 조회 시작');
     

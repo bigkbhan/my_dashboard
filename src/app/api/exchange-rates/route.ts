@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 interface ExchangeRateData {
@@ -135,7 +135,7 @@ async function fetchAndSaveExchangeRates(): Promise<ExchangeRateData[]> {
   ];
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('환율 정보 API 호출 시작');
     

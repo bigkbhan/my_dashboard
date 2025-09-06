@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 // 네이버 금융 웹스크랩핑을 사용한 한국 주식 지수 정보 조회
@@ -21,7 +21,7 @@ function extractIndexData(html: string, indexName: string) {
     let changePercent = 0;
     
     // 패턴 1: <span id="change_value_and_rate">
-    let changeMatch = html.match(/<span id="change_value_and_rate"[^>]*>([^<]+)<\/span>/);
+    const changeMatch = html.match(/<span id="change_value_and_rate"[^>]*>([^<]+)<\/span>/);
     if (changeMatch) {
       const changeText = changeMatch[1];
       console.log(`${indexName} changeText (pattern 1):`, changeText);
@@ -133,7 +133,7 @@ function extractKOSPI200Data(html: string) {
     }
     
     // 3. 등락률 추출 (+0.52% 형태) - 두 번째 strong 태그
-    const changeRateMatch = html.match(/<strong[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/strong>/);
+    let changeRateMatch = html.match(/<strong[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/strong>/);
     let changePercent = 0;
     if (changeRateMatch) {
       const rateText = changeRateMatch[1].replace(/,/g, '');
@@ -264,7 +264,7 @@ async function fetchIndexFromNaver(indexCode: string, indexName: string) {
       // KOSPI200 관련 HTML 요소들 찾기
       const nowValueMatch = html.match(/<td id="now_value"[^>]*>.*?<\/td>/s);
       const changeValueMatch = html.match(/<td id="change_value"[^>]*>.*?<\/td>/s);
-      const changeRateMatch = html.match(/<td id="change_rate"[^>]*>.*?<\/td>/s);
+      let changeRateMatch = html.match(/<td id="change_rate"[^>]*>.*?<\/td>/s);
       
       console.log(`${indexName} now_value HTML:`, nowValueMatch ? nowValueMatch[0] : '없음');
       console.log(`${indexName} change_value HTML:`, changeValueMatch ? changeValueMatch[0] : '없음');
@@ -462,7 +462,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
 }
 
 // 개별 종목 데이터 조회
-async function fetchStockData(tickers: any[]) {
+async function fetchStockData(tickers: { id: number; ticker_code: string; ticker_name: string; is_active: boolean }[]) {
   try {
     console.log('개별 종목 데이터 조회 시작...');
     const stocks = [];
@@ -555,7 +555,7 @@ async function fetchKoreanStockData() {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('한국주식 API 호출 시작');
     const data = await fetchKoreanStockData();

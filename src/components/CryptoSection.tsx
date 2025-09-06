@@ -71,7 +71,13 @@ export default function CryptoSection() {
       
              if (data.cryptos) {
          const cryptoData: CryptoData[] = data.cryptos
-           .map((item: any) => ({
+           .map((item: {
+             symbol: string;
+             name: string;
+             price: string;
+             change: string;
+             changePercent: string;
+           }) => ({
              symbol: item.symbol,
              name: item.name,
              price: item.price,

@@ -49,7 +49,13 @@ export default function ExchangeRateSection() {
        }
       
              if (data.rates) {
-         const rateData: ExchangeRateData[] = data.rates.map((item: any) => ({
+         const rateData: ExchangeRateData[] = data.rates.map((item: {
+           currency: string;
+           rate: string;
+           change: string;
+           changePercent: string;
+           lastUpdate?: string;
+         }) => ({
            currency: item.currency,
            rate: item.rate,
            change: item.change,

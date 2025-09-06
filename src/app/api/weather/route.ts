@@ -82,7 +82,17 @@ export async function GET(request: NextRequest) {
     }
     
     // 3시간 단위 데이터 처리
-    const forecast = data.list.map((item: any) => ({
+    const forecast = data.list.map((item: {
+      dt_txt: string;
+      main: {
+        temp: number;
+        humidity: number;
+      };
+      weather: Array<{
+        description: string;
+        icon: string;
+      }>;
+    }) => ({
       time: item.dt_txt,
       temperature: item.main.temp,
       description: item.weather[0].description,

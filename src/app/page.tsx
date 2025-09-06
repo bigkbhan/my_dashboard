@@ -15,7 +15,7 @@ export default function Home() {
       <div className="container mx-auto px-3 py-4 max-w-md">
         <header className="text-center mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            bigkbhan's 대시보드
+            bigkbhan&apos;s 대시보드
           </h1>
         </header>
 

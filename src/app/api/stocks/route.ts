@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getStockTickers } from '@/lib/db';
 import { getEnvVars } from '@/lib/env';
 
@@ -60,7 +60,7 @@ async function getPreviousDayData(symbol: string): Promise<{ previousClose: numb
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('🚀 주식 정보 조회 시작');
     console.log('📅 현재 시간:', new Date().toISOString());

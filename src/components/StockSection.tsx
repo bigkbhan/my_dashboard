@@ -84,7 +84,13 @@ export default function StockSection() {
       
       if (data.indices) {
         console.log('📈 주요지수 데이터:', data.indices);
-        const indicesData: IndexData[] = data.indices.map((item: any) => ({
+        const indicesData: IndexData[] = data.indices.map((item: {
+          symbol: string;
+          name: string;
+          price: string;
+          change: string;
+          changePercent: string;
+        }) => ({
           symbol: item.symbol,
           name: item.name,
           price: item.price,
@@ -100,7 +106,13 @@ export default function StockSection() {
       
       if (data.stocks) {
         console.log('📈 주식 데이터:', data.stocks);
-        const stocksData: StockData[] = data.stocks.map((item: any) => ({
+        const stocksData: StockData[] = data.stocks.map((item: {
+          symbol: string;
+          name: string;
+          price: string;
+          change: string;
+          changePercent: string;
+        }) => ({
           symbol: item.symbol,
           companyName: item.companyName,
           price: item.price,

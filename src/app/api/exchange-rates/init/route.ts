@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 // 환율 데이터 초기화 API
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     console.log('환율 데이터 초기화 시작');
     

@@ -143,7 +143,7 @@ async function fetchLessonContent(url: string): Promise<{ title: string; content
       console.log(`🔄 전체 페이지에서 내용 추출 시도`);
       
       // sm2-bar-ui 부분 제거
-      let cleanHtml = html.replace(/<div[^>]*class="[^"]*sm2-bar-ui[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '');
+      const cleanHtml = html.replace(/<div[^>]*class="[^"]*sm2-bar-ui[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '');
       
       // h1 태그 이후의 내용 추출
       const afterH1Match = cleanHtml.match(/<h1[^>]*>.*?<\/h1>([\s\S]*)/i);

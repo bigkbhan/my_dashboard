@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     console.log('🔧 content 및 translated_content 컬럼 삭제 마이그레이션 시작...');
     

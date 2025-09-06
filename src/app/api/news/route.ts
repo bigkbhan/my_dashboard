@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const clientId = process.env.NAVER_CLIENT_ID;
     const clientSecret = process.env.NAVER_CLIENT_SECRET;
@@ -41,7 +41,13 @@ export async function GET(request: NextRequest) {
         
         if (data.items && Array.isArray(data.items)) {
           // 뉴스 데이터 가공
-          const processedNews = data.items.map((item: any, index: number) => ({
+          const processedNews = data.items.map((item: {
+            title: string;
+            originallink: string;
+            link: string;
+            description: string;
+            pubDate: string;
+          }, index: number) => ({
             id: `${category.name}_${index + 1}`,
             category: category.name,
             title: decodeHtmlEntities(item.title.replace(/<[^>]*>/g, '')),

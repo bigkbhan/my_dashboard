@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // 주식 Ticker 테이블 생성
     await sql`
