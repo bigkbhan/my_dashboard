@@ -16,9 +16,6 @@ interface NewsItem {
   summary: string;
 }
 
-interface CategoryNews {
-  [key: string]: NewsItem[];
-}
 
 export default function NewsSection() {
   const [isOpen, setIsOpen] = useState(false);

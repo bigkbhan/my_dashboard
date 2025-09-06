@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
@@ -127,9 +128,11 @@ export default function FortuneSection() {
                       >
                         <div className="w-12 h-12 mb-2 flex items-center justify-center">
                           <div className="w-full h-full rounded-full overflow-hidden border-2 border-yellow-300/50 bg-slate-800 p-1 shadow-lg">
-                            <img 
+                            <Image 
                               src={fortune.imageUrl} 
                               alt={fortune.name}
+                              width={48}
+                              height={48}
                               className="w-full h-full object-cover rounded-full"
                               onError={(e) => {
                                 // 이미지 로드 실패 시 기본 아이콘 표시
@@ -157,9 +160,11 @@ export default function FortuneSection() {
                       <div className="text-center mb-4">
                         <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center">
                           <div className="w-full h-full rounded-full overflow-hidden border-2 border-yellow-300/70 bg-slate-800 p-1 shadow-lg">
-                            <img 
+                            <Image 
                               src={selectedFortune.imageUrl} 
                               alt={selectedFortune.name}
+                              width={64}
+                              height={64}
                               className="w-full h-full object-cover rounded-full"
                               onError={(e) => {
                                 // 이미지 로드 실패 시 기본 아이콘 표시

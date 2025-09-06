@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronUp, RefreshCw, MapPin, Settings, Plus, Edit, Trash2, GripVertical, X, Cloud } from 'lucide-react';
+import { ChevronDown, ChevronUp, RefreshCw, MapPin, Settings, Edit, Trash2, GripVertical, X, Cloud } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -42,11 +42,6 @@ interface WeatherCity {
   updated_at: string;
 }
 
-interface CityOption {
-  value: string;
-  label: string;
-  englishName: string;
-}
 
 // 드래그 앤 드롭을 위한 SortableItem 컴포넌트
 function SortableItem({ city, onEdit, onDelete }: { 
@@ -115,25 +110,20 @@ export default function WeatherSection() {
   const [newCity, setNewCity] = useState({ city_code: '', city_name: '', english_name: '' });
   const [editingCity, setEditingCity] = useState<WeatherCity | null>(null);
 
-  useEffect(() => {
-    // 페이지 로드 시에만 초기 데이터 조회
-    fetchWeatherData();
-    fetchCities();
-  }, []); // 빈 의존성 배열로 초기 로드 시에만 실행
-
-  useEffect(() => {
-    // selectedCity가 변경될 때만 데이터 조회 (초기 로드 제외)
-    if (weatherData.length > 0 && cities.length > 0) {
-      fetchWeatherData();
+  const fetchCities = useCallback(async () => {
+    try {
+      const response = await fetch('/api/weather/cities');
+      const data = await response.json();
+      
+      if (response.ok && data.cities) {
+        setCities(data.cities);
+      }
+    } catch (error) {
+      console.error('도시 목록 조회 실패:', error);
     }
-  }, [selectedCity, cities]);
+  }, []);
 
-  useEffect(() => {
-    // cities prop과 localCities state 동기화
-    setLocalCities(cities);
-  }, [cities]);
-
-  const fetchWeatherData = async (isRefresh = false) => {
+  const fetchWeatherData = useCallback(async (isRefresh = false) => {
     try {
       if (isRefresh) {
         setRefreshMessage('날씨 데이터를 조회하는 중...');
@@ -157,12 +147,12 @@ export default function WeatherSection() {
       }
 
              if (data.forecast && Array.isArray(data.forecast)) {
-         setWeatherData(data.forecast);
-         // 선택된 도시의 한글 이름 찾기
-         const selectedCityData = cities.find(city => city.city_code === selectedCity);
-         setCurrentCityName(selectedCityData ? selectedCityData.city_name : selectedCity);
-         setError(null);
-       } else {
+        setWeatherData(data.forecast);
+        // 선택된 도시의 한글 이름 찾기
+        const selectedCityData = cities.find(city => city.city_code === selectedCity);
+        setCurrentCityName(selectedCityData ? selectedCityData.city_name : selectedCity);
+        setError(null);
+      } else {
         throw new Error('날씨 데이터 형식이 올바르지 않습니다.');
       }
     } catch (error) {
@@ -180,7 +170,26 @@ export default function WeatherSection() {
         setRefreshMessage(null);
       }
     }
-  };
+  }, [selectedCity, cities]);
+
+  useEffect(() => {
+    // 페이지 로드 시에만 초기 데이터 조회
+    fetchWeatherData();
+    fetchCities();
+  }, []); // 빈 의존성 배열로 초기 로드 시에만 실행
+
+  useEffect(() => {
+    // selectedCity가 변경될 때만 데이터 조회 (초기 로드 제외)
+    if (weatherData.length > 0 && cities.length > 0) {
+      fetchWeatherData();
+    }
+  }, [selectedCity, cities]);
+
+  useEffect(() => {
+    // cities prop과 localCities state 동기화
+    setLocalCities(cities);
+  }, [cities]);
+
 
   const getWeatherIcon = (iconCode: string) => {
     // OpenWeatherMap 아이콘 코드에 따른 아이콘 매핑
@@ -217,18 +226,6 @@ export default function WeatherSection() {
     });
   };
 
-  const fetchCities = async () => {
-    try {
-      const response = await fetch('/api/weather/cities');
-      const data = await response.json();
-      
-      if (response.ok && data.cities) {
-        setCities(data.cities);
-      }
-    } catch (error) {
-      console.error('도시 목록 조회 실패:', error);
-    }
-  };
 
   const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newCity = event.target.value;

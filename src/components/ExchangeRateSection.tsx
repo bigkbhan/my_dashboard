@@ -79,14 +79,6 @@ export default function ExchangeRateSection() {
      }
   };
 
-  const formatChange = (change: string) => {
-    const isPositive = change.startsWith('+');
-    return (
-      <span className={`font-mono ${isPositive ? 'text-red-400' : 'text-blue-400'}`}>
-        {change}
-      </span>
-    );
-  };
 
   const getCurrencyIcon = (currency: string) => {
     if (currency.includes('USD')) {

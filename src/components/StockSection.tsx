@@ -154,15 +154,6 @@ export default function StockSection() {
      }
   };
 
-  const formatChange = (change: string) => {
-    if (change === 'N/A') return 'N/A';
-    const isPositive = change.startsWith('+');
-    return (
-      <span className={`${isPositive ? 'text-red-400' : 'text-blue-400'}`}>
-        {change}
-      </span>
-    );
-  };
 
   // 종목 관리 함수들
   const handleAddStock = async () => {

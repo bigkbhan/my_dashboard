@@ -114,14 +114,6 @@ export default function CryptoSection() {
      }
   };
 
-  const formatChange = (change: string) => {
-    const isPositive = change.startsWith('+');
-    return (
-      <span className={`${isPositive ? 'text-red-400' : 'text-blue-400'}`}>
-        {change}
-      </span>
-    );
-  };
 
   const getFearGreedColor = (index: string) => {
     if (index === 'N/A') return 'text-slate-400';

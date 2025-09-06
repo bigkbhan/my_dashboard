@@ -123,7 +123,7 @@ export default function QuoteSection() {
                 {/* 명언 내용 */}
                 <div className="mb-4">
                   <blockquote className="text-white text-lg leading-relaxed italic">
-                    "{quotes[0].text}"
+                    &ldquo;{quotes[0].text}&rdquo;
                   </blockquote>
                 </div>
 
