@@ -151,7 +151,6 @@ export default function ConversationSection() {
       console.log('번역 결과 (처음 200자):', translatedContent.substring(0, 200)); // 디버깅용
       
       // 제목은 번역하지 않고 내용만 번역
-      setTranslatedTitle(''); // 제목 번역 안함
       setTranslatedContent(translatedContent);
       
       // 번역 완료 후 바로 번역 내용 표시
