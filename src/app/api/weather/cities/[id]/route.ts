@@ -4,10 +4,11 @@ import { updateWeatherCity, deleteWeatherCity } from '@/lib/weather-db';
 // PUT: 날씨 지역 수정
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: '유효한 ID가 필요합니다.' },
@@ -35,10 +36,11 @@ export async function PUT(
 // DELETE: 날씨 지역 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
     if (isNaN(id)) {
       return NextResponse.json(
         { error: '유효한 ID가 필요합니다.' },

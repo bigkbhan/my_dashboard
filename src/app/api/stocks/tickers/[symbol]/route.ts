@@ -3,10 +3,10 @@ import { sql } from '@vercel/postgres';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { symbol: string } }
+  { params }: { params: Promise<{ symbol: string }> }
 ) {
   try {
-    const { symbol } = params;
+    const { symbol } = await params;
     const { company_name, sector, is_active } = await request.json();
 
     if (!company_name) {
@@ -47,10 +47,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { symbol: string } }
+  { params }: { params: Promise<{ symbol: string }> }
 ) {
   try {
-    const { symbol } = params;
+    const { symbol } = await params;
 
     if (!symbol) {
       return NextResponse.json(
