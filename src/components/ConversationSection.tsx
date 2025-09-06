@@ -27,7 +27,6 @@ export default function ConversationSection() {
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [loading, setLoading] = useState(false);
   const [translating, setTranslating] = useState(false);
-  const [translatedTitle, setTranslatedTitle] = useState<string>('');
   const [translatedContent, setTranslatedContent] = useState<string>('');
   const [showTranslation, setShowTranslation] = useState(false);
   const [error, setError] = useState<string | null>(null);

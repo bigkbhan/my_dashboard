@@ -133,7 +133,7 @@ function extractKOSPI200Data(html: string) {
     }
     
     // 3. 등락률 추출 (+0.52% 형태) - 두 번째 strong 태그
-    let changeRateMatch = html.match(/<strong[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/strong>/);
+    const changeRateMatch = html.match(/<strong[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/strong>/);
     let changePercent = 0;
     if (changeRateMatch) {
       const rateText = changeRateMatch[1].replace(/,/g, '');
@@ -264,7 +264,7 @@ async function fetchIndexFromNaver(indexCode: string, indexName: string) {
       // KOSPI200 관련 HTML 요소들 찾기
       const nowValueMatch = html.match(/<td id="now_value"[^>]*>.*?<\/td>/s);
       const changeValueMatch = html.match(/<td id="change_value"[^>]*>.*?<\/td>/s);
-      let changeRateMatch = html.match(/<td id="change_rate"[^>]*>.*?<\/td>/s);
+      const changeRateMatch = html.match(/<td id="change_rate"[^>]*>.*?<\/td>/s);
       
       console.log(`${indexName} now_value HTML:`, nowValueMatch ? nowValueMatch[0] : '없음');
       console.log(`${indexName} change_value HTML:`, changeValueMatch ? changeValueMatch[0] : '없음');

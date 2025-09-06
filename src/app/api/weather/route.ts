@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // OpenWeatherMap API 설정
 const API_KEY = process.env.OPENWEATHER_API_KEY;
-const CITY = 'Seoul'; // 서울 기준
-const COUNTRY_CODE = 'KR';
 
 export async function GET(request: NextRequest) {
   try {

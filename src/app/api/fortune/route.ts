@@ -174,7 +174,7 @@ async function fetchFortuneData(): Promise<FortuneData> {
         fortunes.push(fortuneData);
       }
       
-    } catch (parseError) {
+    } catch {
       // 파싱 실패 시 기본 데이터로 폴백
       for (let i = 0; i < 12; i++) {
         const zodiacNumber = (i + 1).toString().padStart(2, '0');

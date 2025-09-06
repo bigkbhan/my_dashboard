@@ -176,6 +176,7 @@ export default function WeatherSection() {
     // 페이지 로드 시에만 초기 데이터 조회
     fetchWeatherData();
     fetchCities();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // 빈 의존성 배열로 초기 로드 시에만 실행
 
   useEffect(() => {
@@ -183,6 +184,7 @@ export default function WeatherSection() {
     if (weatherData.length > 0 && cities.length > 0) {
       fetchWeatherData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCity, cities]);
 
   useEffect(() => {
