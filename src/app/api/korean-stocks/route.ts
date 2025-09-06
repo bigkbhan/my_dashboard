@@ -462,7 +462,7 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
 }
 
 // 개별 종목 데이터 조회
-async function fetchStockData(tickers: { id: number; ticker_code: string; ticker_name: string; is_active: boolean }[]) {
+async function fetchStockData(tickers: { ticker_code: string; ticker_name: string; display_order: number }[]) {
   try {
     console.log('개별 종목 데이터 조회 시작...');
     const stocks = [];
@@ -541,7 +541,7 @@ async function fetchKoreanStockData() {
       ORDER BY display_order ASC
     `;
     
-    const stocks = await fetchStockData(tickers);
+    const stocks = await fetchStockData(tickers as { ticker_code: string; ticker_name: string; display_order: number }[]);
     
     return {
       indices,
