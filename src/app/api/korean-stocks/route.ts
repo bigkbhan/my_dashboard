@@ -24,7 +24,6 @@ function extractIndexData(html: string, indexName: string) {
     const changeMatch = html.match(/<span id="change_value_and_rate"[^>]*>([^<]+)<\/span>/);
     if (changeMatch) {
       const changeText = changeMatch[1];
-      console.log(`${indexName} changeText (pattern 1):`, changeText);
       
       // 등락폭과 등락률을 분리
       const changeMatch2 = changeText.match(/([+-]?\d+\.?\d*)\s*([+-]?\d+\.?\d*)%/);
@@ -42,11 +41,9 @@ function extractIndexData(html: string, indexName: string) {
       
       if (changeValueMatch) {
         change = parseFloat(changeValueMatch[1]) || 0;
-        console.log(`${indexName} change (pattern 2):`, change);
       }
       if (changePercentMatch) {
         changePercent = parseFloat(changePercentMatch[1]) || 0;
-        console.log(`${indexName} changePercent (pattern 2):`, changePercent);
       }
     }
     
@@ -58,7 +55,6 @@ function extractIndexData(html: string, indexName: string) {
       if (indexValueMatch) {
         change = parseFloat(indexValueMatch[1]) || 0;
         changePercent = parseFloat(indexValueMatch[2]) || 0;
-        console.log(`${indexName} change (pattern 3):`, change, changePercent);
       }
     }
     
@@ -71,14 +67,8 @@ function extractIndexData(html: string, indexName: string) {
         change = 2.81;
         changePercent = 0.35;
       }
-      console.log(`${indexName} change (pattern 4 - hardcoded):`, change, changePercent);
     }
     
-    console.log(`${indexName} 추출된 데이터:`, {
-      indexValue,
-      change,
-      changePercent
-    });
     
     return {
       name: indexName,
@@ -96,8 +86,6 @@ function extractIndexData(html: string, indexName: string) {
 // KOSPI200 전용 데이터 추출 함수
 function extractKOSPI200Data(html: string) {
   try {
-    console.log('KOSPI200 데이터 추출 시작...');
-    console.log('KOSPI200 HTML 길이:', html.length);
     
     // KOSPI200 테이블 구조에서 데이터 추출
     // 실제 HTML 구조에 맞게 수정
@@ -107,7 +95,6 @@ function extractKOSPI200Data(html: string) {
     let indexValue = 0;
     if (indexValueMatch) {
       indexValue = parseFloat(indexValueMatch[1].replace(/,/g, '')) || 0;
-      console.log('KOSPI200 지수 값:', indexValue);
     }
     
     // 다른 패턴으로 지수 값 추출 시도
@@ -384,12 +371,12 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
 
     // 3. 등락률 추출 - 더 간단한 패턴 사용
     // 먼저 <dd> 태그에서 등락률 찾기
-    let changeRateMatch = html.match(/<dd>([+-]?[0-9,]+\.?[0-9]*)%[^<]*<\/dd>/);
-    console.log(`${tickerName} changeRateMatch (dd 패턴) 결과:`, changeRateMatch);
+    const changeRateMatch1 = html.match(/<dd>([+-]?[0-9,]+\.?[0-9]*)%[^<]*<\/dd>/);
+    console.log(`${tickerName} changeRateMatch (dd 패턴) 결과:`, changeRateMatch1);
     
     let changePercent = 0;
-    if (changeRateMatch) {
-      const ddContent = changeRateMatch[1];
+    if (changeRateMatch1) {
+      const ddContent = changeRateMatch1[1];
       console.log(`${tickerName} ddContent:`, ddContent);
 
       // 등락률 추출 (% 기호가 있는 부분)
@@ -399,11 +386,11 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
       console.log(`${tickerName} 등락률 (dd 패턴):`, changePercent);
     } else {
       // 기존 복잡한 패턴도 시도
-      changeRateMatch = html.match(/<div id="rate_info_krx"[^>]*>[\s\S]*?<div class="today"[^>]*>[\s\S]*?<p[^>]*>[\s\S]*?<\/p>[\s\S]*?<p[^>]*>[\s\S]*?<em[^>]*>[\s\S]*?<\/em>[\s\S]*?<em[^>]*>[\s\S]*?<span[^>]*>([^<]*)<\/span>[\s\S]*?<\/em>[\s\S]*?<\/p>[\s\S]*?<\/div>[\s\S]*?<\/div>/);
-      console.log(`${tickerName} changeRateMatch (복잡한 패턴) 결과:`, changeRateMatch);
+      const changeRateMatch2 = html.match(/<div id="rate_info_krx"[^>]*>[\s\S]*?<div class="today"[^>]*>[\s\S]*?<p[^>]*>[\s\S]*?<\/p>[\s\S]*?<p[^>]*>[\s\S]*?<em[^>]*>[\s\S]*?<\/em>[\s\S]*?<em[^>]*>[\s\S]*?<span[^>]*>([^<]*)<\/span>[\s\S]*?<\/em>[\s\S]*?<\/p>[\s\S]*?<\/div>[\s\S]*?<\/div>/);
+      console.log(`${tickerName} changeRateMatch (복잡한 패턴) 결과:`, changeRateMatch2);
       
-      if (changeRateMatch) {
-        const spanContent = changeRateMatch[1];
+      if (changeRateMatch2) {
+        const spanContent = changeRateMatch2[1];
         console.log(`${tickerName} spanContent:`, spanContent);
 
         // 등락률 추출 (% 기호가 있는 부분)
@@ -416,9 +403,9 @@ function extractStockData(html: string, tickerName: string, tickerCode: string) 
     
     // 등락률 추출 실패 시 다른 패턴 시도
     if (changePercent === 0) {
-      const changeRateMatch2 = html.match(/<em[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/em>/);
-      if (changeRateMatch2) {
-        const rateText = changeRateMatch2[1].replace(/,/g, '');
+      const changeRateMatch3 = html.match(/<em[^>]*>([+-]?[0-9,]+\.?[0-9]*)%<\/em>/);
+      if (changeRateMatch3) {
+        const rateText = changeRateMatch3[1].replace(/,/g, '');
         changePercent = parseFloat(rateText) || 0;
         console.log(`${tickerName} 등락률 (패턴 2):`, changePercent);
       }

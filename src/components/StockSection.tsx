@@ -58,13 +58,11 @@ export default function StockSection() {
         setError(null);
       }
       
-      console.log('🔍 주식 데이터 조회 시작...');
       if (!isRefresh) {
         setError(null);
       }
       
       const response = await fetch('/api/stocks');
-      console.log('📡 주식 API 응답 상태:', response.status, response.statusText);
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -73,17 +71,8 @@ export default function StockSection() {
       }
       
       const data = await response.json();
-      console.log('📊 주식 API 응답 데이터:', data);
-      console.log('📊 응답 데이터 구조:', {
-        hasIndices: !!data.indices,
-        indicesLength: data.indices?.length || 0,
-        hasStocks: !!data.stocks,
-        stocksLength: data.stocks?.length || 0,
-        hasTimestamp: !!data.timestamp
-      });
       
       if (data.indices) {
-        console.log('📈 주요지수 데이터:', data.indices);
         const indicesData: IndexData[] = data.indices.map((item: {
           symbol: string;
           name: string;
@@ -98,14 +87,11 @@ export default function StockSection() {
           changePercent: item.changePercent
         }));
         setIndices(indicesData);
-        console.log('✅ 주요지수 상태 업데이트 완료:', indicesData);
       } else {
-        console.warn('⚠️ 주요지수 데이터가 없습니다.');
         setIndices([]);
       }
       
       if (data.stocks) {
-        console.log('📈 주식 데이터:', data.stocks);
         const stocksData: StockData[] = data.stocks.map((item: {
           symbol: string;
           name: string;
@@ -114,30 +100,19 @@ export default function StockSection() {
           changePercent: string;
         }) => ({
           symbol: item.symbol,
-          companyName: item.companyName,
+          companyName: item.name,
           price: item.price,
           change: item.change,
           changePercent: item.changePercent
         }));
         setStocks(stocksData);
-        console.log('✅ 주식 상태 업데이트 완료:', stocksData);
       } else {
-        console.warn('⚠️ 주식 데이터가 없습니다.');
         setStocks([]);
       }
       
-      console.log('🎯 최종 상태:', {
-        indicesCount: data.indices?.length || 0,
-        stocksCount: data.stocks?.length || 0
-      });
       
     } catch (error) {
-      console.error('💥 주식 데이터 조회 실패:', error);
       if (error instanceof Error) {
-        console.error('💥 에러 상세:', {
-          message: error.message,
-          stack: error.stack?.split('\n').slice(0, 5)
-        });
         setError(error.message);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
