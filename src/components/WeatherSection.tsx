@@ -363,7 +363,7 @@ export default function WeatherSection() {
   const handleDragEnd = (event: { active: { id: string }; over: { id: string } | null }) => {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       const oldIndex = localCities.findIndex(city => city.id === active.id);
       const newIndex = localCities.findIndex(city => city.id === over.id);
       
