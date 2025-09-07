@@ -26,7 +26,7 @@ export async function getWeatherCities(): Promise<WeatherCity[]> {
       WHERE is_active = true
       ORDER BY display_order ASC
     `;
-    return result.rows;
+    return result.rows as WeatherCity[];
   } catch (error) {
     console.error('날씨 지역 조회 오류:', error);
     throw new Error('날씨 지역을 조회할 수 없습니다.');
@@ -51,7 +51,7 @@ export async function addWeatherCity(city: WeatherCityInput): Promise<WeatherCit
       RETURNING id, city_code, city_name, english_name, display_order, is_active, created_at, updated_at
     `;
 
-    return result.rows[0];
+    return result.rows[0] as WeatherCity;
   } catch (error) {
     console.error('날씨 지역 추가 오류:', error);
     throw new Error('날씨 지역을 추가할 수 없습니다.');
@@ -94,7 +94,7 @@ export async function updateWeatherCity(id: number, city: Partial<WeatherCityInp
       throw new Error('해당 ID의 날씨 지역을 찾을 수 없습니다.');
     }
 
-    return result.rows[0];
+    return result.rows[0] as WeatherCity;
   } catch (error) {
     console.error('날씨 지역 수정 오류:', error);
     throw new Error('날씨 지역을 수정할 수 없습니다.');

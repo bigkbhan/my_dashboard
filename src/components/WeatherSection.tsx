@@ -11,6 +11,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -55,7 +56,7 @@ function SortableItem({ city, onEdit, onDelete }: {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: city.id });
+  } = useSortable({ id: city.id.toString() });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -360,12 +361,12 @@ export default function WeatherSection() {
     })
   );
 
-  const handleDragEnd = (event: { active: { id: string }; over: { id: string } | null }) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      const oldIndex = localCities.findIndex(city => city.id === active.id);
-      const newIndex = localCities.findIndex(city => city.id === over.id);
+      const oldIndex = localCities.findIndex(city => city.id === parseInt(active.id.toString()));
+      const newIndex = localCities.findIndex(city => city.id === parseInt(over.id.toString()));
       
       const reorderedCities = arrayMove(localCities, oldIndex, newIndex);
       handleReorderCities(reorderedCities);
@@ -591,7 +592,7 @@ export default function WeatherSection() {
                   onDragEnd={handleDragEnd}
                 >
                   <SortableContext
-                    items={localCities.map(city => city.id)}
+                    items={localCities.map(city => city.id.toString())}
                     strategy={verticalListSortingStrategy}
                   >
                     <div className="space-y-2">

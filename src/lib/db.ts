@@ -31,7 +31,7 @@ export async function getStockTickers(): Promise<StockTicker[]> {
       WHERE is_active = true
       ORDER BY display_order ASC, id ASC
     `;
-    return result.rows;
+    return result.rows as StockTicker[];
   } catch (error) {
     console.error('주식 Ticker 조회 실패:', error);
     return [];
@@ -47,7 +47,7 @@ export async function getCryptoTickers(): Promise<CryptoTicker[]> {
       WHERE is_active = true
       ORDER BY display_order ASC, id ASC
     `;
-    return result.rows;
+    return result.rows as CryptoTicker[];
   } catch (error) {
     console.error('암호화폐 Ticker 조회 실패:', error);
     return [];
